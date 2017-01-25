@@ -89,6 +89,10 @@ namespace ToDoListV99.Controllers
         {
             if (ModelState.IsValid)
             {
+                string currentListID = RouteData.Values["id"].ToString();
+                List currentList = db.Lists.FirstOrDefault
+                    (x => x.ListId.ToString() == currentListID);
+                item.List = currentList;
                 db.Items.Add(item);
                 db.SaveChanges();
                 return RedirectToAction("Index");
