@@ -75,7 +75,7 @@ namespace ToDoListV99.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateItem([Bind(Include = "ItemID,Description")] Item item)
+        public ActionResult CreateItem([Bind(Include = "ItemID,Description,IsComplete")] Item item)
         {
             if (ModelState.IsValid)
             {
