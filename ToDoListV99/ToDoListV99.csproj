@@ -170,6 +170,8 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Custom_Scripts\BuildItemTable.js" />
+    <Content Include="Custom_Scripts\BuildListTable.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -182,6 +184,8 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -211,6 +215,8 @@
     <Content Include="Views\Lists\Index.cshtml" />
     <Content Include="Views\Lists\CreateItem.cshtml" />
     <Content Include="Views\Lists\ViewItems.cshtml" />
+    <Content Include="Views\Lists\_ItemTable.cshtml" />
+    <Content Include="Views\Lists\_ListTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

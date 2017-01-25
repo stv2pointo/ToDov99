@@ -20,6 +20,16 @@ namespace ToDoListV99.Controllers
             return View(db.Lists.ToList());
         }
 
+        public ActionResult BuildListTable()
+        {
+            return PartialView("_ListTable",db.Lists.ToList());
+        }
+
+        public ActionResult BuildItemTable()
+        {
+            return PartialView("_ItemTable", db.Items.ToList());
+        }
+
         // GET: 
         public ActionResult ViewItems()
         {
