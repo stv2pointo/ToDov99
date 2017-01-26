@@ -10,17 +10,17 @@ using ToDoListV99.Models;
 
 namespace ToDoListV99.Controllers
 {
-    public class ListsController : Controller
+    public class ListViewController : Controller
     {
-        private MyDbContext db = new MyDbContext(); // alternate way would be to do a using (new MyDbContext) {}
+        private MyDbContext db = new MyDbContext();
 
-        // GET: Lists
+        // GET: ListView
         public ActionResult Index()
         {
             return View(db.Lists.ToList());
         }
 
-        // GET: Lists/Details/5
+        // GET: ListView/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -35,13 +35,13 @@ namespace ToDoListV99.Controllers
             return View(list);
         }
 
-        // GET: Lists/Create
+        // GET: ListView/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Lists/Create
+        // POST: ListView/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -51,7 +51,6 @@ namespace ToDoListV99.Controllers
             if (ModelState.IsValid)
             {
                 db.Lists.Add(list);
-                
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -59,8 +58,7 @@ namespace ToDoListV99.Controllers
             return View(list);
         }
 
-
-        // GET: Lists/Edit/5
+        // GET: ListView/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -72,21 +70,10 @@ namespace ToDoListV99.Controllers
             {
                 return HttpNotFound();
             }
-            /*****************************************************
-            add a category
-            *****************************************************/
-            //var Results = from c in db.Categories
-            //              select new
-            //              {
-            //                  c.CategoryId,
-            //                  c.CategoryName
-            //              };
-            //var MyCategories = new List<string>;
-
             return View(list);
         }
 
-        // POST: Lists/Edit/5
+        // POST: ListView/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -101,9 +88,8 @@ namespace ToDoListV99.Controllers
             }
             return View(list);
         }
-   
 
-        // GET: Lists/Delete/5
+        // GET: ListView/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -118,7 +104,7 @@ namespace ToDoListV99.Controllers
             return View(list);
         }
 
-        // POST: Lists/Delete/5
+        // POST: ListView/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
