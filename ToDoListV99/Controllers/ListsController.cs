@@ -67,12 +67,14 @@ namespace ToDoListV99.Controllers
             if (ModelState.IsValid)
             {
                 db.Lists.Add(list);
+                
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
             return View(list);
         }
+
 
         // GET: Lists/Create
         public ActionResult CreateItem()
@@ -101,6 +103,8 @@ namespace ToDoListV99.Controllers
             return View(item);
         }
 
+
+
         // GET: Lists/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -113,6 +117,17 @@ namespace ToDoListV99.Controllers
             {
                 return HttpNotFound();
             }
+            /*****************************************************
+            add a category
+            *****************************************************/
+            //var Results = from c in db.Categories
+            //              select new
+            //              {
+            //                  c.CategoryId,
+            //                  c.CategoryName
+            //              };
+            //var MyCategories = new List<string>;
+
             return View(list);
         }
 
@@ -131,6 +146,7 @@ namespace ToDoListV99.Controllers
             }
             return View(list);
         }
+   
 
         // GET: Lists/Delete/5
         public ActionResult Delete(int? id)
