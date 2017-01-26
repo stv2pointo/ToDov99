@@ -10,33 +10,17 @@ using ToDoListV99.Models;
 
 namespace ToDoListV99.Controllers
 {
-    public class ListsController : Controller
+    public class ListViewController : Controller
     {
-        private MyDbContext db = new MyDbContext(); // alternate way would be to do a using (new MyDbContext) {}
+        private MyDbContext db = new MyDbContext();
 
-        // GET: Lists
+        // GET: ListView
         public ActionResult Index()
         {
             return View(db.Lists.ToList());
         }
 
-        public ActionResult BuildListTable()
-        {
-            return PartialView("_ListTable",db.Lists.ToList());
-        }
-
-        public ActionResult BuildItemTable()
-        {
-            return PartialView("_ItemTable", db.Items.ToList());
-        }
-
-        // GET: 
-        public ActionResult ViewItems()
-        {
-            return View(db.Items.ToList());
-        }
-
-        // GET: Lists/Details/5
+        // GET: ListView/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -51,13 +35,13 @@ namespace ToDoListV99.Controllers
             return View(list);
         }
 
-        // GET: Lists/Create
+        // GET: ListView/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Lists/Create
+        // POST: ListView/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -74,34 +58,7 @@ namespace ToDoListV99.Controllers
             return View(list);
         }
 
-        // GET: Lists/Create
-        public ActionResult CreateItem()
-        {
-            return View();
-        }
-
-        // POST: Lists/CreateItem
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult CreateItem([Bind(Include = "ItemID,Description,IsComplete")] Item item)
-        {
-            if (ModelState.IsValid)
-            {
-                string currentListID = RouteData.Values["id"].ToString();
-                List currentList = db.Lists.FirstOrDefault
-                    (x => x.ListId.ToString() == currentListID);
-                item.List = currentList;
-                db.Items.Add(item);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(item);
-        }
-
-        // GET: Lists/Edit/5
+        // GET: ListView/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -116,7 +73,7 @@ namespace ToDoListV99.Controllers
             return View(list);
         }
 
-        // POST: Lists/Edit/5
+        // POST: ListView/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -132,7 +89,7 @@ namespace ToDoListV99.Controllers
             return View(list);
         }
 
-        // GET: Lists/Delete/5
+        // GET: ListView/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -147,7 +104,7 @@ namespace ToDoListV99.Controllers
             return View(list);
         }
 
-        // POST: Lists/Delete/5
+        // POST: ListView/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
