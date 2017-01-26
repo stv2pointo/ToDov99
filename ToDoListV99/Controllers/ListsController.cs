@@ -20,22 +20,6 @@ namespace ToDoListV99.Controllers
             return View(db.Lists.ToList());
         }
 
-        public ActionResult BuildListTable()
-        {
-            return PartialView("_ListTable",db.Lists.ToList());
-        }
-
-        public ActionResult BuildItemTable()
-        {
-            return PartialView("_ItemTable", db.Items.ToList());
-        }
-
-        // GET: 
-        public ActionResult ViewItems()
-        {
-            return View(db.Items.ToList());
-        }
-
         // GET: Lists/Details/5
         public ActionResult Details(int? id)
         {
@@ -74,35 +58,6 @@ namespace ToDoListV99.Controllers
 
             return View(list);
         }
-
-
-        // GET: Lists/Create
-        public ActionResult CreateItem()
-        {
-            return View();
-        }
-
-        // POST: Lists/CreateItem
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult CreateItem([Bind(Include = "ItemID,Description,IsComplete")] Item item)
-        {
-            if (ModelState.IsValid)
-            {
-                string currentListID = RouteData.Values["id"].ToString();
-                List currentList = db.Lists.FirstOrDefault
-                    (x => x.ListId.ToString() == currentListID);
-                item.List = currentList;
-                db.Items.Add(item);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(item);
-        }
-
 
 
         // GET: Lists/Edit/5
