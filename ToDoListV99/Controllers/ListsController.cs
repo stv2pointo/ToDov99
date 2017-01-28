@@ -13,6 +13,7 @@ namespace ToDoListV99.Controllers
     public class ListsController : Controller
     {
         private MyDbContext db = new MyDbContext();
+        protected static string CurrentListID { get; set; }
 
         // GET: Lists
         public ActionResult Index()
@@ -27,12 +28,21 @@ namespace ToDoListV99.Controllers
 
         public ActionResult BuildItemTable()
         {
-            return PartialView("_ItemTable", db.Items.ToList());
+            return PartialView("_ItemTable", GetMyItems());
+        }
+
+        public IEnumerable<Item> GetMyItems()
+        {
+            List currentList = db.Lists.FirstOrDefault
+                (x => x.ListId.ToString() == CurrentListID);
+            return db.Items.ToList().Where(x => x.List.ListId == currentList.ListId);
+
         }
 
         // GET: 
-        public ActionResult ViewItems()
+        public ActionResult ViewItems(int? id)
         {
+            CurrentListID = id.ToString();
             return View(db.Items.ToList());
         }
 
