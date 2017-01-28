@@ -3,7 +3,7 @@
 
 
 
-@model ToDoListV99.Models.List
+@model ToDoListV99.Models.ListsViewModel
 
 @{
     ViewBag.Title = "Edit";
@@ -35,12 +35,14 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Categories, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <ul>
-                    @foreach (var cats in Model.Categories)
-                    {
-                        <li>@cats.CategoryName</li>
-                    }
-                </ul>
+                @for (int i = 0; i < Model.Categories.Count(); i++)
+                {
+                    @Html.EditorFor(m => Model.Categories[i].Checked)
+                    @Html.DisplayFor(m => Model.Categories[i].Name)
+
+                    @Html.HiddenFor(m => Model.Categories[i].Name)
+                    @Html.HiddenFor(m => Model.Categories[i].Id)
+                }
             </div>
         </div>
 

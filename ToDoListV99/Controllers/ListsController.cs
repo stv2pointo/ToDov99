@@ -118,17 +118,34 @@ namespace ToDoListV99.Controllers
                 return HttpNotFound();
             }
             /*****************************************************
-            add a category
+            get the categories out ogf the db
             *****************************************************/
-            //var Results = from c in db.Categories
-            //              select new
-            //              {
-            //                  c.CategoryId,
-            //                  c.CategoryName
-            //              };
-            //var MyCategories = new List<string>;
+            var Results = from c in db.Categories
+                          select new
+                          {
+                              c.CategoryId,
+                              c.CategoryName,
+                              Checked = ((from ab in db.ListsToCategories
+                                          where (ab.ListId == id) & (ab.CategoryId == c.CategoryId)
+                                          select ab).Count() > 0)
+                          };
 
-            return View(list);
+            var MyViewModel = new ListsViewModel();
+
+            MyViewModel.ListId = id.Value;
+            MyViewModel.ListName = list.ListName;
+
+            var MyCheckBoxList = new List<CheckBoxViewModel>();
+
+            foreach (var item in Results)
+            {
+                MyCheckBoxList.Add(new CheckBoxViewModel { Id = item.CategoryId, Name = item.CategoryName, Checked = item.Checked });
+            }
+
+            MyViewModel.Categories = MyCheckBoxList;
+
+
+            return View(MyViewModel);
         }
 
         // POST: Lists/Edit/5
@@ -136,11 +153,30 @@ namespace ToDoListV99.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ListId,ListName")] List list)
+        public ActionResult Edit(ListsViewModel list)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(list).State = EntityState.Modified;
+                var MyList = db.Lists.Find(list.ListId);
+
+                MyList.ListName = list.ListName;
+
+                foreach (var item in db.ListsToCategories)
+                {
+                    if (item.ListId == list.ListId)
+                    {
+                        db.Entry(item).State = System.Data.Entity.EntityState.Deleted;
+                    }
+                }
+
+                foreach (var item in list.Categories)
+                {
+                    if (item.Checked)
+                    {
+                        db.ListsToCategories.Add(new ListToCategory() { ListId = list.ListId, CategoryId = item.Id });
+                    }
+                }
+                //db.Entry(list).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
