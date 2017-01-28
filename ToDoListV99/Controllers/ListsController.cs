@@ -43,7 +43,7 @@ namespace ToDoListV99.Controllers
         public ActionResult ViewItems(int? id)
         {
             CurrentListID = id.ToString();
-            return View(db.Items.ToList());
+            return View();
         }
 
         // GET: Lists/Details/5
@@ -86,34 +86,25 @@ namespace ToDoListV99.Controllers
         }
 
 
-        // GET: Lists/Create
-        public ActionResult CreateItem()
-        {
-            return View();
-        }
+        
 
-        // POST: Lists/CreateItem
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateItem([Bind(Include = "ItemID,Description,IsComplete")] Item item)
+        public ActionResult AJAXCreateItem([Bind(Include = "ItemID,Description")] Item item)
         {
             if (ModelState.IsValid)
             {
-                string currentListID = RouteData.Values["id"].ToString();
+
                 List currentList = db.Lists.FirstOrDefault
-                    (x => x.ListId.ToString() == currentListID);
+                    (x => x.ListId.ToString() == CurrentListID);
                 item.List = currentList;
+                item.IsComplete = false;
                 db.Items.Add(item);
                 db.SaveChanges();
-                return RedirectToAction("Index");
             }
 
-            return View(item);
+            return PartialView("_ItemTable", GetMyItems());
         }
-
-
 
         // GET: Lists/Edit/5
         public ActionResult Edit(int? id)

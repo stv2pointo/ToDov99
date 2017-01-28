@@ -1,20 +1,35 @@
-﻿@model IEnumerable<ToDoListV99.Models.Item>
+﻿@model ToDoListV99.Models.Item
 
 @{
     ViewBag.Title = "ViewItems";
 }
 
-<h2>ViewItems</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 
 <div id="itemTableDiv"></div>
+<div id="itemCreateForm">
+    @using (Ajax.BeginForm("AJAXCreateItem", "Lists",
+                new AjaxOptions
+                {
+                    InsertionMode = InsertionMode.Replace,
+                    HttpMethod = "POST",
+                    UpdateTargetId = "itemTableDiv"
+                }))
+    { 
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    }
+    </div>
 
-@section Scripts{
-    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
-    <script src="~/Custom_Scripts/BuildItemTable.js"></script>
+    @section Scripts{
+        <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+        <script src="~/Custom_Scripts/BuildItemTable.js"></script>
+        @Scripts.Render("~/bundles/jqueryval")
 
-}
+    }
 
