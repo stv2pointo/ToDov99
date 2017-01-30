@@ -18,7 +18,7 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IsComplete)
+                @Html.CheckBoxFor(modelItem => item.IsComplete, new { id = item.ItemId, @class = "ActiveCheck"})
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.ItemId }) |
@@ -28,4 +28,26 @@
         </tr>
     }
 
+
 </table>
+
+<div id="itemCreateForm">
+    @using (Ajax.BeginForm("AJAXCreateItem", "Lists",
+                        new AjaxOptions
+                        {
+                            InsertionMode = InsertionMode.Replace,
+                            HttpMethod = "POST",
+                            UpdateTargetId = "itemTableDiv"
+                        }))
+    {
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+            @Html.LabelFor(model => model.FirstOrDefault().Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FirstOrDefault().Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FirstOrDefault().Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    }
+</div>
+<script src="~/Custom_Scripts/AddCheckBoxListener.js"></script>

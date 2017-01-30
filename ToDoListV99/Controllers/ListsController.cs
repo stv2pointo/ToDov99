@@ -109,6 +109,7 @@ namespace ToDoListV99.Controllers
         // GET: Lists/Edit/5
         public ActionResult Edit(int? id)
         {
+            CurrentListID = id.ToString();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -147,7 +148,31 @@ namespace ToDoListV99.Controllers
             }
             return View(list);
         }
-   
+
+        // POST: Lists/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        public ActionResult AJAXEditItem(int? id, bool value)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Item item = db.Items.Find(id);
+            if (item == null)
+            {
+                return HttpNotFound();
+            }
+            else
+            {
+                item.IsComplete = value;
+                db.Entry(item).State = EntityState.Modified;
+                db.SaveChanges();
+                return PartialView("_ItemTable", GetMyItems());
+            }
+        }
+
 
         // GET: Lists/Delete/5
         public ActionResult Delete(int? id)
