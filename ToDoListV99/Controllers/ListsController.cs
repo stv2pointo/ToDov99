@@ -48,7 +48,33 @@ namespace ToDoListV99.Controllers
             {
                 return HttpNotFound();
             }
-            return View(list);
+            //return View(list);
+            var Results = from c in db.Categories
+                          select new
+                          {
+                              c.CategoryId,
+                              c.CategoryName,
+                              Checked = ((from ab in db.ListsToCategories
+                                          where (ab.ListId == id) & (ab.CategoryId == c.CategoryId)
+                                          select ab).Count() > 0)
+                          };
+
+            var MyViewModel = new ListsViewModel();
+
+            MyViewModel.ListId = id.Value;
+            MyViewModel.ListName = list.ListName;
+
+            var MyCheckBoxList = new List<CheckBoxViewModel>();
+
+            foreach (var item in Results)
+            {
+                MyCheckBoxList.Add(new CheckBoxViewModel { Id = item.CategoryId, Name = item.CategoryName, Checked = item.Checked });
+            }
+
+            MyViewModel.Categories = MyCheckBoxList;
+
+
+            return View(MyViewModel);
         }
 
         // GET: Lists/Create
