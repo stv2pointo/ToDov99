@@ -1,0 +1,139 @@
+--Group 3
+--Project1
+
+
+USE Master
+
+IF EXISTS (SELECT * FROM sysdatabases WHERE name='PROJECT1_TODO')
+DROP DATABASE PROJECT1_TODO
+
+GO
+
+CREATE DATABASE PROJECT1_TODO
+
+ON PRIMARY
+
+(
+NAME = 'PROJECT1_TODO',
+--TITAN
+FILENAME = 'C:\Program Files\Microsoft SQL Server\MSSQL12.SQLEXPRESS2014\MSSQL\DATA\PROJECT1_TODO.mdf',
+SIZE = 10MB,
+MAXSIZE = 50MB,
+FILEGROWTH = 10%
+)
+
+LOG ON
+
+(
+NAME = 'PROJECT1_TODO_LOG',
+--TITAN
+FILENAME = 'C:\Program Files\Microsoft SQL Server\MSSQL12.SQLEXPRESS2014\MSSQL\DATA\PROJECT1_TODO_log.ldf',
+SIZE = 2500KB, --10% for Read, otherwise 25%
+MAXSIZE = 12500KB, -- 25% of 10MB
+FILEGROWTH = 1250KB -- 25% of 5MB
+)
+
+GO
+
+-- With the database now created, switch to it and begin creating the individual 
+-- tables for the database
+
+USE PROJECT1_TODO
+
+
+CREATE TABLE List
+(
+ListID			smallint		NOT NULL		IDENTITY(1,1),
+ListName		varchar(4)		NULL
+)
+
+CREATE TABLE Category
+(
+CategoryID			smallint		NOT NULL	IDENTITY(1,1),
+CategoryName    	varchar(50)		NULL
+)
+
+CREATE TABLE ListCategory
+(
+ListCategoryID		smallint		NOT NULL	IDENTITY(1,1),
+ListID				smallint		NOT NULL,
+CategoryID			smallint		NOT NULL
+)
+
+CREATE TABLE Item
+(
+ItemID				smallint		NOT NULL		IDENTITY(1,1),
+ListID				smallint		NULL,
+ItemContent			varchar(200)	NULL,
+ItemIsCompleted		bit				NULL,
+ItemCompletedDate	datetime		NULL,
+ItemCreationDate	datetime		NULL
+)
+
+-- Ensure that the script to create tables has finished
+-- before altering tables and adding in constraints
+
+GO
+
+-- Alter each of the tables to add Primary keys
+
+ALTER TABLE List
+	ADD CONSTRAINT PK_ListID
+	PRIMARY KEY (ListID)
+
+ALTER TABLE Category
+	ADD CONSTRAINT PK_CategoryID
+	PRIMARY KEY (CategoryID)
+	
+ALTER TABLE ListCategory
+	ADD CONSTRAINT PK_ListCategoryID
+	PRIMARY KEY (ListCategoryID)
+	
+ALTER TABLE Item
+	ADD CONSTRAINT PK_ItemID
+	PRIMARY KEY (ItemID)
+	
+-- Ensure PKs have been created before moving on to FKs
+GO
+
+-- Alter tables to set up foreign keys
+	
+ALTER TABLE Item
+	ADD CONSTRAINT FK_ListInItem
+	FOREIGN KEY (ListID) REFERENCES List (ListID)
+	ON UPDATE Cascade
+	ON DELETE Cascade
+	
+ALTER TABLE ListCategory
+	ADD CONSTRAINT FK_ListInListCategory
+	FOREIGN KEY (ListID) REFERENCES List (ListID)
+	ON UPDATE Cascade
+	ON DELETE Cascade
+
+ALTER TABLE ListCategory
+	ADD CONSTRAINT FK_CategoryInListCategory
+	FOREIGN KEY (CategoryID) REFERENCES Category (CategoryID)
+	ON UPDATE Cascade
+	ON DELETE Cascade
+	
+	
+-- defaults
+
+
+-- user
+
+GO
+CREATE USER [CMSUser] FOR LOGIN [CMSUser]
+GO
+USE [PROJECT1_TODO]
+GO
+ALTER ROLE [db_datareader] ADD MEMBER [CMSUser]
+GO
+USE [PROJECT1_TODO]
+GO
+ALTER ROLE [db_datawriter] ADD MEMBER [CMSUser]
+GO
+
+
+
+
