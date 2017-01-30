@@ -12,8 +12,10 @@ namespace ToDoListV99.Controllers
 {
     public class ListsController : Controller
     {
-        private MyDbContext db = new MyDbContext();
+
+        private MyDbContext db = new MyDbContext(); // alternate way would be to do a using (new MyDbContext) {}
         protected static string CurrentListID { get; set; }
+
 
         // GET: Lists
         public ActionResult Index()
@@ -28,6 +30,7 @@ namespace ToDoListV99.Controllers
 
         public ActionResult BuildItemTable()
         {
+
             return PartialView("_ItemTable", GetMyItems());
         }
 
@@ -44,7 +47,11 @@ namespace ToDoListV99.Controllers
         {
             CurrentListID = id.ToString();
             return View();
+
+            return PartialView("_ItemTable", db.Items.ToList());
         }
+
+
 
         // GET: Lists/Details/5
         public ActionResult Details(int? id)
@@ -86,6 +93,7 @@ namespace ToDoListV99.Controllers
         }
 
 
+
         
 
         [HttpPost]
@@ -106,6 +114,36 @@ namespace ToDoListV99.Controllers
             return PartialView("_ItemTable", GetMyItems());
         }
 
+
+        // GET: Lists/Create
+        public ActionResult CreateItem()
+        {
+            return View();
+        }
+
+        // POST: Lists/CreateItem
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateItem([Bind(Include = "ItemID,Description,IsComplete")] Item item)
+        {
+            if (ModelState.IsValid)
+            {
+                string currentListID = RouteData.Values["id"].ToString();
+                List currentList = db.Lists.FirstOrDefault
+                    (x => x.ListId.ToString() == currentListID);
+                item.List = currentList;
+                db.Items.Add(item);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(item);
+        }
+
+
+
         // GET: Lists/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -120,6 +158,7 @@ namespace ToDoListV99.Controllers
                 return HttpNotFound();
             }
             /*****************************************************
+
             add a category
             *****************************************************/
             //var Results = from c in db.Categories
@@ -131,6 +170,37 @@ namespace ToDoListV99.Controllers
             //var MyCategories = new List<string>;
 
             return View(list);
+            
+            /*****************************************************
+            get the categories out ogf the db
+            *****************************************************/
+            var Results = from c in db.Categories
+                          select new
+                          {
+                              c.CategoryId,
+                              c.CategoryName,
+                              Checked = ((from ab in db.ListsToCategories
+                                          where (ab.ListId == id) & (ab.CategoryId == c.CategoryId)
+                                          select ab).Count() > 0)
+                          };
+
+            var MyViewModel = new ListsViewModel();
+
+            MyViewModel.ListId = id.Value;
+            MyViewModel.ListName = list.ListName;
+
+            var MyCheckBoxList = new List<CheckBoxViewModel>();
+
+            foreach (var item in Results)
+            {
+                MyCheckBoxList.Add(new CheckBoxViewModel { Id = item.CategoryId, Name = item.CategoryName, Checked = item.Checked });
+            }
+
+            MyViewModel.Categories = MyCheckBoxList;
+
+
+            return View(MyViewModel);
+
         }
 
         // POST: Lists/Edit/5
@@ -138,16 +208,36 @@ namespace ToDoListV99.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ListId,ListName")] List list)
+        public ActionResult Edit(ListsViewModel list)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(list).State = EntityState.Modified;
+                var MyList = db.Lists.Find(list.ListId);
+
+                MyList.ListName = list.ListName;
+
+                foreach (var item in db.ListsToCategories)
+                {
+                    if (item.ListId == list.ListId)
+                    {
+                        db.Entry(item).State = System.Data.Entity.EntityState.Deleted;
+                    }
+                }
+
+                foreach (var item in list.Categories)
+                {
+                    if (item.Checked)
+                    {
+                        db.ListsToCategories.Add(new ListToCategory() { ListId = list.ListId, CategoryId = item.Id });
+                    }
+                }
+                //db.Entry(list).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(list);
         }
+   
 
         // POST: Lists/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
