@@ -109,6 +109,7 @@ namespace ToDoListV99.Controllers
         // GET: Lists/Edit/5
         public ActionResult Edit(int? id)
         {
+            CurrentListID = id.ToString();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
