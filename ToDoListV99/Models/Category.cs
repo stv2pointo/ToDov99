@@ -9,7 +9,6 @@ namespace ToDoListV99.Models
     {
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public virtual ICollection<ListToCategory> ListstoCategories { get; set; }
-
+        public virtual ICollection<List> Lists { get; set; }
     }
 }
