@@ -162,17 +162,25 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\CheckBoxViewModel.cs" />
     <Compile Include="Models\Item.cs" />
     <Compile Include="Models\List.cs" />
+    <Compile Include="Models\ListsViewModel.cs" />
+    <Compile Include="Models\ListToCategory.cs" />
     <Compile Include="Models\MyDbContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+
+    <Content Include="Custom_Scripts\AddCheckBoxListener.js" />
     <Content Include="Custom_Scripts\BuildItemTable.js" />
     <Content Include="Custom_Scripts\BuildListTable.js" />
+    <Content Include="Database\DatabaseCreationProject1.txt" />
+
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -214,6 +222,11 @@
     <Content Include="Views\Lists\Details.cshtml" />
     <Content Include="Views\Lists\Edit.cshtml" />
     <Content Include="Views\Lists\Index.cshtml" />
+
+    <Content Include="Views\Lists\CreateItem.cshtml" />
+    <Content Include="Views\Lists\ViewItems.cshtml" />
+    <Content Include="Views\Lists\_ItemTable.cshtml" />
+    <Content Include="Views\Lists\_ListTable.cshtml" />
 
     <Content Include="Views\Categories\Create.cshtml" />
     <Content Include="Views\Categories\Delete.cshtml" />
