@@ -41,26 +41,26 @@ GO
 USE PROJECT1_TODO
 
 
-CREATE TABLE Lists
+CREATE TABLE List
 (
 ListID			smallint		NOT NULL		IDENTITY(1,1),
 ListName		varchar(4)		NULL
 )
 
-CREATE TABLE Categories
+CREATE TABLE Category
 (
 CategoryID			smallint		NOT NULL	IDENTITY(1,1),
 CategoryName    	varchar(50)		NULL
 )
 
-CREATE TABLE ListCategories
+CREATE TABLE ListCategory
 (
 ListCategoryID		smallint		NOT NULL	IDENTITY(1,1),
 ListID				smallint		NOT NULL,
 CategoryID			smallint		NOT NULL
 )
 
-CREATE TABLE Items
+CREATE TABLE Item
 (
 ItemID				smallint		NOT NULL		IDENTITY(1,1),
 ListID				smallint		NULL,
@@ -77,19 +77,19 @@ GO
 
 -- Alter each of the tables to add Primary keys
 
-ALTER TABLE Lists
+ALTER TABLE List
 	ADD CONSTRAINT PK_ListID
 	PRIMARY KEY (ListID)
 
-ALTER TABLE Categories
+ALTER TABLE Category
 	ADD CONSTRAINT PK_CategoryID
 	PRIMARY KEY (CategoryID)
 	
-ALTER TABLE ListCategories
+ALTER TABLE ListCategory
 	ADD CONSTRAINT PK_ListCategoryID
 	PRIMARY KEY (ListCategoryID)
 	
-ALTER TABLE Items
+ALTER TABLE Item
 	ADD CONSTRAINT PK_ItemID
 	PRIMARY KEY (ItemID)
 	
@@ -98,21 +98,21 @@ GO
 
 -- Alter tables to set up foreign keys
 	
-ALTER TABLE Items
+ALTER TABLE Item
 	ADD CONSTRAINT FK_ListInItem
-	FOREIGN KEY (ListID) REFERENCES Lists (ListID)
+	FOREIGN KEY (ListID) REFERENCES List (ListID)
 	ON UPDATE Cascade
 	ON DELETE Cascade
 	
-ALTER TABLE ListCategories
+ALTER TABLE ListCategory
 	ADD CONSTRAINT FK_ListInListCategory
-	FOREIGN KEY (ListID) REFERENCES Lists (ListID)
+	FOREIGN KEY (ListID) REFERENCES List (ListID)
 	ON UPDATE Cascade
 	ON DELETE Cascade
 
-ALTER TABLE ListCategories
+ALTER TABLE ListCategory
 	ADD CONSTRAINT FK_CategoryInListCategory
-	FOREIGN KEY (CategoryID) REFERENCES Categories (CategoryID)
+	FOREIGN KEY (CategoryID) REFERENCES Category (CategoryID)
 	ON UPDATE Cascade
 	ON DELETE Cascade
 	
