@@ -1,0 +1,53 @@
+﻿@model IEnumerable<ToDoListV99.Models.Item>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsComplete)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.CheckBoxFor(modelItem => item.IsComplete, new { id = item.ItemId, @class = "ActiveCheck"})
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ItemId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ItemId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ItemId })
+            </td>
+        </tr>
+    }
+
+
+</table>
+
+<div id="itemCreateForm">
+    @using (Ajax.BeginForm("AJAXCreateItem", "Lists",
+                        new AjaxOptions
+                        {
+                            InsertionMode = InsertionMode.Replace,
+                            HttpMethod = "POST",
+                            UpdateTargetId = "itemTableDiv"
+                        }))
+    {
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+            @Html.LabelFor(model => model.FirstOrDefault().Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FirstOrDefault().Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FirstOrDefault().Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    }
+</div>
+<script src="~/Custom_Scripts/AddCheckBoxListener.js"></script>

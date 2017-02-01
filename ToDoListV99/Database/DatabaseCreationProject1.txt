@@ -1,0 +1,59 @@
+--Group 3
+--Project1
+
+
+USE Master
+
+IF EXISTS (SELECT * FROM sysdatabases WHERE name='Project1Todo')
+DROP DATABASE Project1Todo
+
+GO
+
+CREATE DATABASE Project1Todo
+
+ON PRIMARY
+
+(
+NAME = 'Project1Todo',
+--TITAN
+FILENAME = 'C:\Program Files\Microsoft SQL Server\MSSQL12.SQLEXPRESS2014\MSSQL\DATA\Project1Todo.mdf',
+SIZE = 10MB,
+MAXSIZE = 50MB,
+FILEGROWTH = 10%
+)
+
+LOG ON
+
+(
+NAME = 'Project1Todo_LOG',
+--TITAN
+FILENAME = 'C:\Program Files\Microsoft SQL Server\MSSQL12.SQLEXPRESS2014\MSSQL\DATA\Project1Todo_log.ldf',
+SIZE = 2500KB, --10% for Read, otherwise 25%
+MAXSIZE = 12500KB, -- 25% of 10MB
+FILEGROWTH = 1250KB -- 25% of 5MB
+)
+
+GO
+
+-- With the database now created, switch to it and begin creating the individual 
+-- tables for the database
+
+USE Project1Todo
+
+-- user
+
+GO
+CREATE USER [CMSUser] FOR LOGIN [CMSUser]
+GO
+USE [PROJECT1_TODO]
+GO
+ALTER ROLE [db_datareader] ADD MEMBER [CMSUser]
+GO
+USE [PROJECT1_TODO]
+GO
+ALTER ROLE [db_datawriter] ADD MEMBER [CMSUser]
+GO
+
+
+
+
