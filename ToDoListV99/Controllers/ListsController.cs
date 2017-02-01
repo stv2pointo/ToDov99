@@ -12,7 +12,10 @@ namespace ToDoListV99.Controllers
 {
     public class ListsController : Controller
     {
-        private MyDbContext db = new MyDbContext(); // alternate way would be to do a using (new MyDbContext) {}
+
+        private MyDbContext db = new MyDbContext();
+        protected static string CurrentListID { get; set; }
+
 
         // GET: Lists
         public ActionResult Index()
@@ -27,13 +30,24 @@ namespace ToDoListV99.Controllers
 
         public ActionResult BuildItemTable()
         {
-            return PartialView("_ItemTable", db.Items.ToList());
+            return PartialView("_ItemTable", GetMyItems());
+        }
+
+        public IEnumerable<Item> GetMyItems()
+        {
+            List currentList = db.Lists.FirstOrDefault
+                (x => x.ListId.ToString() == CurrentListID);
+            return db.Items.ToList().Where(x => x.List.ListId == currentList.ListId);
+
         }
 
         // GET: 
-        public ActionResult ViewItems()
+        public ActionResult ViewItems(int? id)
         {
-            return View(db.Items.ToList());
+            CurrentListID = id.ToString();
+            return View();
+            return PartialView("_ItemTable", db.Items.ToList());
+
         }
 
         // GET: Lists/Details/5
@@ -103,37 +117,31 @@ namespace ToDoListV99.Controllers
 
 
 
-        // GET: Lists/Create
-        public ActionResult CreateItem()
-        {
-            return View();
-        }
+        
 
-        // POST: Lists/CreateItem
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateItem([Bind(Include = "ItemID,Description,IsComplete")] Item item)
+        public ActionResult AJAXCreateItem([Bind(Include = "ItemID,Description")] Item item)
         {
             if (ModelState.IsValid)
             {
-                string currentListID = RouteData.Values["id"].ToString();
+
                 List currentList = db.Lists.FirstOrDefault
-                    (x => x.ListId.ToString() == currentListID);
+                    (x => x.ListId.ToString() == CurrentListID);
                 item.List = currentList;
+                item.IsComplete = false;
                 db.Items.Add(item);
                 db.SaveChanges();
-                return RedirectToAction("Index");
             }
 
-            return View(item);
+            return PartialView("_ItemTable", GetMyItems());
         }
 
 
         // GET: Lists/Edit/5
         public ActionResult Edit(int? id)
         {
+            CurrentListID = id.ToString();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -143,10 +151,13 @@ namespace ToDoListV99.Controllers
             {
                 return HttpNotFound();
             }
-            /*****************************************************
-            get the categories out ogf the db
-            *****************************************************/
-            var Results = from c in db.Categories
+
+
+            
+
+            return View(list);
+
+           /* var Results = from c in db.Categories
                           select new
                           {
                               c.CategoryId,
@@ -171,7 +182,8 @@ namespace ToDoListV99.Controllers
             MyViewModel.Categories = MyCheckBoxList;
 
 
-            return View(MyViewModel);
+            return View(MyViewModel);*/
+
         }
 
         // POST: Lists/Edit/5
@@ -209,6 +221,31 @@ namespace ToDoListV99.Controllers
             return View(list);
         }
    
+
+        // POST: Lists/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        public ActionResult AJAXEditItem(int? id, bool value)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Item item = db.Items.Find(id);
+            if (item == null)
+            {
+                return HttpNotFound();
+            }
+            else
+            {
+                item.IsComplete = value;
+                db.Entry(item).State = EntityState.Modified;
+                db.SaveChanges();
+                return PartialView("_ItemTable", GetMyItems());
+            }
+        }
+
 
         // GET: Lists/Delete/5
         public ActionResult Delete(int? id)
