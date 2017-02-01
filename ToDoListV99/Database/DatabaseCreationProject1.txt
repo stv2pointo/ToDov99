@@ -4,19 +4,19 @@
 
 USE Master
 
-IF EXISTS (SELECT * FROM sysdatabases WHERE name='PROJECT1_TODO')
-DROP DATABASE PROJECT1_TODO
+IF EXISTS (SELECT * FROM sysdatabases WHERE name='Project1Todo')
+DROP DATABASE Project1Todo
 
 GO
 
-CREATE DATABASE PROJECT1_TODO
+CREATE DATABASE Project1Todo
 
 ON PRIMARY
 
 (
-NAME = 'PROJECT1_TODO',
+NAME = 'Project1Todo',
 --TITAN
-FILENAME = 'C:\Program Files\Microsoft SQL Server\MSSQL12.SQLEXPRESS2014\MSSQL\DATA\PROJECT1_TODO.mdf',
+FILENAME = 'C:\Program Files\Microsoft SQL Server\MSSQL12.SQLEXPRESS2014\MSSQL\DATA\Project1Todo.mdf',
 SIZE = 10MB,
 MAXSIZE = 50MB,
 FILEGROWTH = 10%
@@ -25,9 +25,9 @@ FILEGROWTH = 10%
 LOG ON
 
 (
-NAME = 'PROJECT1_TODO_LOG',
+NAME = 'Project1Todo_LOG',
 --TITAN
-FILENAME = 'C:\Program Files\Microsoft SQL Server\MSSQL12.SQLEXPRESS2014\MSSQL\DATA\PROJECT1_TODO_log.ldf',
+FILENAME = 'C:\Program Files\Microsoft SQL Server\MSSQL12.SQLEXPRESS2014\MSSQL\DATA\Project1Todo_log.ldf',
 SIZE = 2500KB, --10% for Read, otherwise 25%
 MAXSIZE = 12500KB, -- 25% of 10MB
 FILEGROWTH = 1250KB -- 25% of 5MB
@@ -38,7 +38,7 @@ GO
 -- With the database now created, switch to it and begin creating the individual 
 -- tables for the database
 
-USE PROJECT1_TODO
+USE Project1Todo
 
 
 CREATE TABLE List
