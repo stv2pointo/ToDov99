@@ -1,4 +1,4 @@
-﻿@model ToDoListV99.Models.ListsViewModel
+﻿@model ToDoListV99.Models.List
 
 @{
     ViewBag.Title = "Details";
@@ -16,19 +16,6 @@
 
         <dd>
             @Html.DisplayFor(model => model.ListName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Categories)
-        </dt>
-
-        <dd>
-            @foreach (var item in Model.Categories)
-            {
-                if (item.Checked)
-                {
-                    <div>@item.Name</div>
-                }
-            }
         </dd>
 
     </dl>
