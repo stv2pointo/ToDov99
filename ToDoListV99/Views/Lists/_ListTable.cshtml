@@ -8,6 +8,10 @@
         <th></th>
     </tr>
 
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+
     @foreach (var item in Model)
     {
         <tr>
@@ -17,7 +21,6 @@
             <td>
 
                 @Html.ActionLink("Edit", "Edit", new { id = item.ListId }) |
-                @Html.ActionLink("View Items", "ViewItems", new { id = item.ListId }) |
                 @Html.ActionLink("Details", "Details", new { id = item.ListId }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.ListId })
             </td>
