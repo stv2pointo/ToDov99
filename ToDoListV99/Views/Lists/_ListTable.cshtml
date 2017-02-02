@@ -7,19 +7,23 @@
         </th>
         <th></th>
     </tr>
-
+    
     @foreach (var item in Model)
     {
+        @*@{string listName => item.ListName;}*@
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.ListName)
+               
+                @*@Html.DisplayFor(modelItem => item.ListName)*@
+                @Html.ActionLink(item.ListName, "AddCategoriesToAList", new { id = item.ListId })
             </td>
             <td>
 
-                @Html.ActionLink("Edit", "Edit", new { id = item.ListId }) |
+                @*@Html.ActionLink("Edit", "Edit", new { id = item.ListId }) |
                 @Html.ActionLink("View Items", "ViewItems", new { id = item.ListId }) |
+                @Html.ActionLink("Edit Categories To This List", "AddCategoriesToAList", new { id = item.ListId }) |
                 @Html.ActionLink("Details", "Details", new { id = item.ListId }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ListId })
+                @Html.ActionLink("Delete", "Delete", new { id = item.ListId })*@
             </td>
         </tr>
     }

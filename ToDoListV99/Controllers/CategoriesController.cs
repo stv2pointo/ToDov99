@@ -52,7 +52,8 @@ namespace ToDoListV99.Controllers
             {
                 db.Categories.Add(category);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Lists");
+
             }
 
             return View(category);
