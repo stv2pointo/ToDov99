@@ -3,8 +3,7 @@
 
 
 
-
-@model ToDoListV99.Models.ListsViewModel
+@model ToDoListV99.Models.List
 
 @{
     ViewBag.Title = "Edit";
@@ -16,7 +15,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>List</h4>
         <hr />
@@ -31,22 +30,7 @@
             </div>
         </div>
 
-        @*TODO:
-            this div is added as a place to add list of categories*@
-        <div class="form-group">
-            @Html.LabelFor(model => model.Categories, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-
-                @for (int i = 0; i < Model.Categories.Count(); i++)
-                {
-                    @Html.EditorFor(m => Model.Categories[i].Checked)
-                    @Html.DisplayFor(m => Model.Categories[i].Name)
-
-                    @Html.HiddenFor(m => Model.Categories[i].Name)
-                    @Html.HiddenFor(m => Model.Categories[i].Id)
-                }
-            </div>
-        </div>
+       
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
