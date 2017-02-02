@@ -41,15 +41,6 @@ namespace ToDoListV99.Controllers
 
         }
 
-        // GET: 
-        public ActionResult ViewItems(int? id)
-        {
-            CurrentListID = id.ToString();
-            return View();
-            return PartialView("_ItemTable", db.Items.ToList());
-
-        }
-
         // GET: Lists/Details/5
         public ActionResult Details(int? id)
         {
