@@ -245,6 +245,7 @@ namespace ToDoListV99.Controllers
                 return PartialView("_ItemTable", GetMyItems());
             }
         }
+       
 
 
         // GET: Lists/Delete/5
@@ -281,5 +282,91 @@ namespace ToDoListV99.Controllers
             }
             base.Dispose(disposing);
         }
+
+        /************* add categories to a list **********************/
+
+        // GET: Lists/Edit/5
+        public ActionResult AddCategoriesToAList(int? id)
+        {
+            CurrentListID = id.ToString();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            List list = db.Lists.Find(id);
+            if (list == null)
+            {
+                return HttpNotFound();
+            }
+
+
+
+
+            //return View(list);
+
+            var Results = from c in db.Categories
+                           select new
+                           {
+                               c.CategoryId,
+                               c.CategoryName,
+                               Checked = ((from ab in db.ListsToCategories
+                                           where (ab.ListId == id) & (ab.CategoryId == c.CategoryId)
+                                           select ab).Count() > 0)
+                           };
+
+             var MyViewModel = new ListsViewModel();
+
+             MyViewModel.ListId = id.Value;
+             MyViewModel.ListName = list.ListName;
+
+             var MyCheckBoxList = new List<CheckBoxViewModel>();
+
+             foreach (var item in Results)
+             {
+                 MyCheckBoxList.Add(new CheckBoxViewModel { Id = item.CategoryId, Name = item.CategoryName, Checked = item.Checked });
+             }
+
+             MyViewModel.Categories = MyCheckBoxList;
+
+
+             return View(MyViewModel);
+
+        }
+
+        // POST: Lists/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddCategoriesToAList(ListsViewModel list)
+        {
+            if (ModelState.IsValid)
+            {
+                var MyList = db.Lists.Find(list.ListId);
+
+                MyList.ListName = list.ListName;
+
+                foreach (var item in db.ListsToCategories)
+                {
+                    if (item.ListId == list.ListId)
+                    {
+                        db.Entry(item).State = System.Data.Entity.EntityState.Deleted;
+                    }
+                }
+
+                foreach (var item in list.Categories)
+                {
+                    if (item.Checked)
+                    {
+                        db.ListsToCategories.Add(new ListToCategory() { ListId = list.ListId, CategoryId = item.Id });
+                    }
+                }
+                //db.Entry(list).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(list);
+        }
+        /*********** end add categories to a list ********************/
     }
 }
