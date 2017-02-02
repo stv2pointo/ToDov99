@@ -1,0 +1,66 @@
+﻿@model ToDoListV99.Models.ListsViewModel
+
+@{
+    ViewBag.Title = "AddCategoriesToAList";
+}
+
+<h2>@Model.ListName</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @*<h4>List</h4>*@
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.ListId)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ListName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ListName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ListName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Categories, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @for (int i = 0; i < Model.Categories.Count(); i++)
+                {
+                    @Html.EditorFor(m => Model.Categories[i].Checked)
+                    @Html.DisplayFor(m => Model.Categories[i].Name)
+
+
+                    @Html.HiddenFor(m => Model.Categories[i].Name)
+                    @Html.HiddenFor(m => Model.Categories[i].Id)
+                }
+                @Html.ActionLink(" New Category ", "Create", "Categories")
+
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div id="itemTableDiv"></div>
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+
+@section Scripts {
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Custom_Scripts/BuildItemTable.js"></script>
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
