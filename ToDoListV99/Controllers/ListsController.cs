@@ -40,20 +40,6 @@ namespace ToDoListV99.Controllers
             return db.Items.ToList().Where(x => x.List.ListId == currentList.ListId);
 
         }
-        
-        ///** just a copy and paste of  of the above code**/
-        //public ActionResult BuildCategoryTable()
-        //{
-        //    return PartialView("_ItemTable", GetMyCategories());
-        //}
-
-        //public IEnumerable<ListToCategory> GetMyCategories()
-        //{
-        //    List currentList = db.Lists.FirstOrDefault
-        //        (x => x.ListId.ToString() == CurrentListID);
-        //    return db.ListsToCategories.ToList().Where(x => x.List.ListId == currentList.ListId);
-        //}
-        ///**  end copy and past attempt **/
 
         // GET: 
         public ActionResult ViewItems(int? id)
