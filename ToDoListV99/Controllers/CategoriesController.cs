@@ -101,7 +101,7 @@ namespace ToDoListV99.Controllers
             if (category == null)
             {
                 return HttpNotFound();
-            }
+            }        
             return View(category);
         }
 
@@ -110,9 +110,23 @@ namespace ToDoListV99.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            //see if this category is tied to any lists
+            //if tied to lists delete category and join
             Category category = db.Categories.Find(id);
+            var Results = from ltc in db.ListsToCategories
+                          where ltc.CategoryId == id
+                          select ltc.ListToCategoryId;
+            // get rid of all the join instances
+            foreach (var item in Results)
+            {
+                ListToCategory ltc = db.ListsToCategories.Find(item);
+                db.ListsToCategories.Remove(ltc);
+            }
+            
             db.Categories.Remove(category);
             db.SaveChanges();
+            
+           
             return RedirectToAction("Index");
         }
 
