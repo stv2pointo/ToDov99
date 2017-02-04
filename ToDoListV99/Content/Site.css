@@ -26,4 +26,6 @@ textarea {
 /*Styling for ToDo Items*/
 .CompletedItem{
     text-decoration:line-through;
+    opacity: 0.6;
 }
+
