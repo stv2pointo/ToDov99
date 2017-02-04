@@ -9,7 +9,6 @@ namespace ToDoListV99.Models
     {
         public int ListId { get; set; }
         public string ListName { get; set; }
-        public List<CheckBoxViewModel> Categories { get; set; }//is the name CAtegories a problem?
-
+        public List<CheckBoxViewModel> Categories { get; set; }
     }
 }
