@@ -10,7 +10,7 @@
 <table class="table">
     <tr>
         <th>
-            Tasks:
+            Items:
         </th>
         <th>
             @*@Html.DisplayNameFor(model => model.IsComplete)*@
@@ -57,7 +57,7 @@
     {
         <div class="form-group">
             @Html.AntiForgeryToken()
-            <p>Create task: </p>
+            <p>Create item: </p>
             <div class="col-md-10">
                 @Html.EditorFor(model => model.FirstOrDefault().Description, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.FirstOrDefault().Description, "", new { @class = "text-danger" })
