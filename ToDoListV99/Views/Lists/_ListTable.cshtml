@@ -1,12 +1,12 @@
 ﻿@model IEnumerable<ToDoListV99.Models.List>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.ListName)
-        </th>
-        <th></th>
-    </tr>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.ListName)</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
 
 
     <p>
@@ -16,17 +16,17 @@
 
     @foreach (var item in Model)
     {
-       
+
         <tr>
             <td>
-               
-               
-                @Html.ActionLink(item.ListName, "AddCategoriesToAList", new { id = item.ListId })
+
+
+                @Html.ActionLink(item.ListName, "AddCategoriesToAList", new {id = item.ListId})
             </td>
             <td>
 
 
-                @Html.ActionLink("Delete", "Delete", new { id = item.ListId })
+                @Html.ActionLink("Delete", "Delete", new {id = item.ListId})
             </td>
         </tr>
     }
