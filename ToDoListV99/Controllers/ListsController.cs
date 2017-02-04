@@ -282,6 +282,17 @@ namespace ToDoListV99.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             List list = db.Lists.Find(id);
+            var items = from item in db.Items
+                          where item.List.ListId == id
+                          select item.ItemId;
+            // get rid of all the join instances
+            foreach (var i in items)
+            {
+                Delete(i);
+                //Item item = db.Items.Find(i);
+                //db.Items.Remove(item);
+            }
+
             db.Lists.Remove(list);
             db.SaveChanges();
             return RedirectToAction("Index");
