@@ -7,12 +7,13 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ToDoListV99.Models;
+using ToDoListV99.Services;
 
 namespace ToDoListV99.Controllers
 {
     public class ListsController : Controller
     {
-
+        private IItemService itemService = new ItemService();
         private MyDbContext db = new MyDbContext();
         protected static string CurrentListID { get; set; }
 
@@ -52,6 +53,14 @@ namespace ToDoListV99.Controllers
             ViewBag.Percent = Math.Round(100f * ((float)completeCount / (float)myItems.Count()));
 
             return myItems;
+
+        }
+
+        public ActionResult ViewItems(int? id)
+        {
+            CurrentListID = id.ToString();
+            return View();
+            return PartialView("_ItemTable", db.Items.ToList());
 
         }
 
@@ -250,7 +259,29 @@ namespace ToDoListV99.Controllers
                 return PartialView("_ItemTable", GetMyItems());
             }
         }
-       
+
+        public ActionResult DeleteItem(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Item item = db.Items.Find(id);
+            if (item == null)
+            {
+                return HttpNotFound();
+            }
+            return View(item);
+        }
+
+        [HttpPost, ActionName("DeleteItem")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            
+            itemService.deleteItem(id);
+            return RedirectToAction("Index");
+        }
 
 
         // GET: Lists/Delete/5
@@ -271,13 +302,24 @@ namespace ToDoListV99.Controllers
         // POST: Lists/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed1(int id)
         {
             List list = db.Lists.Find(id);
+            var items = from item in db.Items
+                          where item.List.ListId == id
+                          select item.ItemId;
+            // get rid of all the join instances
+            foreach (var i in items)
+            {
+                itemService.deleteItem(i);
+            }
+
             db.Lists.Remove(list);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+
 
         protected override void Dispose(bool disposing)
         {
@@ -290,7 +332,7 @@ namespace ToDoListV99.Controllers
 
         /************* add categories to a list **********************/
 
-        // GET:
+        // GET: Lists/Edit/5
         public ActionResult AddCategoriesToAList(int? id)
         {
             CurrentListID = id.ToString();
@@ -303,6 +345,11 @@ namespace ToDoListV99.Controllers
             {
                 return HttpNotFound();
             }
+
+
+
+
+            //return View(list);
 
             var Results = from c in db.Categories
                            select new
@@ -333,6 +380,7 @@ namespace ToDoListV99.Controllers
 
         }
 
+        // POST: Lists/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -360,6 +408,7 @@ namespace ToDoListV99.Controllers
                         db.ListsToCategories.Add(new ListToCategory() { ListId = list.ListId, CategoryId = item.Id });
                     }
                 }
+                //db.Entry(list).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
