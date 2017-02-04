@@ -7,12 +7,13 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ToDoListV99.Models;
+using ToDoListV99.Services;
 
 namespace ToDoListV99.Controllers
 {
     public class ListsController : Controller
     {
-
+        private IItemService itemService = new ItemService();
         private MyDbContext db = new MyDbContext();
         protected static string CurrentListID { get; set; }
 
@@ -236,7 +237,29 @@ namespace ToDoListV99.Controllers
                 return PartialView("_ItemTable", GetMyItems());
             }
         }
-       
+
+        public ActionResult DeleteItem(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Item item = db.Items.Find(id);
+            if (item == null)
+            {
+                return HttpNotFound();
+            }
+            return View(item);
+        }
+
+        [HttpPost, ActionName("DeleteItem")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            
+            itemService.deleteItem(id);
+            return RedirectToAction("Index");
+        }
 
 
         // GET: Lists/Delete/5
@@ -257,7 +280,7 @@ namespace ToDoListV99.Controllers
         // POST: Lists/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed1(int id)
         {
             List list = db.Lists.Find(id);
             var items = from item in db.Items
@@ -266,15 +289,15 @@ namespace ToDoListV99.Controllers
             // get rid of all the join instances
             foreach (var i in items)
             {
-                Delete(i);
-                //Item item = db.Items.Find(i);
-                //db.Items.Remove(item);
+                itemService.deleteItem(i);
             }
 
             db.Lists.Remove(list);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+
 
         protected override void Dispose(bool disposing)
         {
