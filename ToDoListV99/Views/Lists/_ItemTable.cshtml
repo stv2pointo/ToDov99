@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<ToDoListV99.Models.Item>
 
 <div id="progressBarItem">
-    <p>@(ViewBag.Percent)%</p>
+    @*<p>@(ViewBag.Percent)%</p>*@
     <div class="progress">
         <div class="progress-bar" role="progressbar"
              style="width:@(Html.AttributeEncode(ViewBag.Percent))%"></div>
