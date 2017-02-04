@@ -7,18 +7,20 @@
              style="width:@(Html.AttributeEncode(ViewBag.Percent))%"></div>
     </div>
 </div>
-<table class="table table-hover">
+<table id="ListItems" class="table table-hover">
     <thead>
-        <tr>
-            <th>Item</th>
-            <th>Completion Status</th>
-            <th>Delete</th>
-        </tr>
+    <tr>
+        <th>Item</th>
+        <th>Completion Status</th>
+        <th>Delete</th>
+    </tr>
     </thead>
+    
+    <tbody>
 
         @foreach (var item in Model)
         {
-            <tr>
+            <tr id="ii-@item.ItemId">
                 <td>
                     @if (!item.IsComplete)
                 {
@@ -40,7 +42,7 @@
             </tr>
         }
 
-
+    </tbody>
 
 </table>
 
@@ -63,5 +65,5 @@
         </div>
     }
 </div>
-<script src="~/Custom_Scripts/AddCheckBoxListener.js"></script>
+<script src="~/Custom_Scripts/ListItemManagment.js"></script>
 
