@@ -1,25 +1,32 @@
 ﻿@model IEnumerable<ToDoListV99.Models.List>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.ListName)
-        </th>
-        <th></th>
-    </tr>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.ListName)</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+
+
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+
 
     @foreach (var item in Model)
     {
+
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.ListName)
+
+
+                @Html.ActionLink(item.ListName, "AddCategoriesToAList", new {id = item.ListId})
             </td>
             <td>
 
-                @Html.ActionLink("Edit", "Edit", new { id = item.ListId }) |
-                @Html.ActionLink("View Items", "ViewItems", new { id = item.ListId }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ListId }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ListId })
+
+                @Html.ActionLink("Delete", "Delete", new {id = item.ListId})
             </td>
         </tr>
     }

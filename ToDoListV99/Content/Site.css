@@ -22,3 +22,10 @@ select,
 textarea {
     max-width: 280px;
 }
+
+/*Styling for ToDo Items*/
+.CompletedItem{
+    text-decoration:line-through;
+    opacity: 0.6;
+}
+
