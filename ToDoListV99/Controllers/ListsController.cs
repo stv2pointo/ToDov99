@@ -323,7 +323,7 @@ namespace ToDoListV99.Controllers
 
              foreach (var item in Results)
              {
-                 MyCheckBoxList.Add(new CheckBoxViewModel { Id = item.CategoryId, Name = item.CategoryName, Checked = item.Checked });
+                 MyCheckBoxList.Add(new CheckBoxViewModel { Id = item.CategoryId, Name = " " + item.CategoryName + "  --  ", Checked = item.Checked });
              }
 
              MyViewModel.Categories = MyCheckBoxList;
@@ -361,7 +361,7 @@ namespace ToDoListV99.Controllers
                     }
                 }
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             return View(list);
         }
