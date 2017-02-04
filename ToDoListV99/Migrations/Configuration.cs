@@ -18,6 +18,16 @@ namespace ToDoListV99.Migrations
         protected override void Seed(ToDoListV99.Models.MyDbContext context)
         {
             //  This method will be called after migrating to the latest version.
+            
+            context.Categories.AddOrUpdate(
+                c => c.CategoryName,
+                new Models.Category() { CategoryName = "Shopping" },
+                new Models.Category() { CategoryName = "School" },
+                new Models.Category() { CategoryName = "Work" }
+                );
+            context.Lists.AddOrUpdate(
+                l => l.ListName,
+                new Models.List() { ListName = "My List" });
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data. E.g.
@@ -29,6 +39,7 @@ namespace ToDoListV99.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+            
         }
     }
 }
