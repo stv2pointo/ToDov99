@@ -2,21 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using ToDoListV99.Models;
 
 namespace ToDoListV99.Services
 {
     public class ItemService : IItemService
     {
-        private MyDbContext _context = new MyDbContext();
 
         public void deleteItem(int id)
         {
-            var itemInDb = _context.Items.SingleOrDefault(c => c.ItemId == id);
 
-            _context.Items.Remove(itemInDb);
+            HttpClient client = new HttpClient();
 
-            _context.SaveChanges();
+            client.BaseAddress = new Uri("http://" + HttpContext.Current.Request.Url.Host + ":" +
+                HttpContext.Current.Request.Url.Port + "/api/items/");
+
+            // Add an Accept header for JSON format.
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
+
+            HttpResponseMessage response = client.DeleteAsync(id.ToString()).Result;
+
+
         }
     }
 }
