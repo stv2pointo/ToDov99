@@ -37,7 +37,21 @@ namespace ToDoListV99.Controllers
         {
             List currentList = db.Lists.FirstOrDefault
                 (x => x.ListId.ToString() == CurrentListID);
-            return db.Items.ToList().Where(x => x.List.ListId == currentList.ListId);
+            IEnumerable<Item> myItems = db.Items.ToList().Where(x => x.List.ListId == currentList.ListId);
+            
+            //get the info for the progress bar
+            int completeCount = 0;
+            foreach (Item item in myItems)
+            {
+                if (item.IsComplete)
+                {
+                    completeCount++;
+                }
+            }
+
+            ViewBag.Percent = Math.Round(100f * ((float)completeCount / (float)myItems.Count()));
+
+            return myItems;
 
         }
 
