@@ -195,7 +195,7 @@
     <Content Include="Custom_Scripts\ListItemManagment.js" />
     <Content Include="Custom_Scripts\BuildItemTable.js" />
     <Content Include="Custom_Scripts\BuildListTable.js" />
-    <Content Include="Database\DatabaseCreationProject1.txt" />
+    <Content Include="Database_Script\DatabaseCreationProject1.txt" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
