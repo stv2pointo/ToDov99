@@ -250,9 +250,7 @@
     <Content Include="Views\Lists\AddCategoriesToAList.cshtml" />
     <Content Include="Views\Lists\DeleteItem.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
