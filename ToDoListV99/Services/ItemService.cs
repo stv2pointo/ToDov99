@@ -16,8 +16,8 @@ namespace ToDoListV99.Services
 
             HttpClient client = new HttpClient();
 
-            client.BaseAddress = new Uri("http://" + HttpContext.Current.Request.Url.Host + ":" +
-                HttpContext.Current.Request.Url.Port + "/api/items/");
+            // the following gives the protocol, host and port
+            client.BaseAddress = new Uri(HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + "/api/items/");
 
             // Add an Accept header for JSON format.
             client.DefaultRequestHeaders.Accept.Add(
